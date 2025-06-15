@@ -1,0 +1,260 @@
+// USAGE GUIDE: How to implement the authentication system
+
+# /\*
+
+# IMPLEMENTATION GUIDE FOR AUTHENTICATION SYSTEM
+
+1. ENVIRONMENT VARIABLES (.env.local):
+
+   ```
+   API_URL=http://localhost:3001
+   ```
+
+2. APP LAYOUT (app/layout.tsx):
+
+   ```tsx
+   import { AuthProvider } from "@/components/providers/AuthProvider";
+   import { Toaster } from "sonner";
+
+   export default function RootLayout({
+     children,
+   }: {
+     children: React.ReactNode;
+   }) {
+     return (
+       <html lang="en">
+         <body>
+           <AuthProvider>{children}</AuthProvider>
+           <Toaster />
+         </body>
+       </html>
+     );
+   }
+   ```
+
+3. LOGIN PAGE (app/auth/login/page.tsx):
+
+   ```tsx
+   import LoginForm from "@/components/auth/LoginForm";
+
+   export default function LoginPage() {
+     return <LoginForm />;
+   }
+   ```
+
+4. SIGNUP PAGE (app/auth/register/page.tsx):
+
+   ```tsx
+   import SignupForm from "@/components/auth/SignupForm";
+
+   export default function SignupPage() {
+     return <SignupForm />;
+   }
+   ```
+
+5. PROTECTED DASHBOARD LAYOUT (app/dashboard/layout.tsx):
+
+   ```tsx
+   import { ProtectedRoute } from "@/components/providers/AuthProvider";
+   import { LogoutButton } from "@/components/auth/LogoutButton";
+   import { useAuthStore } from "@/store/auth";
+
+   export default function DashboardLayout({
+     children,
+   }: {
+     children: React.ReactNode;
+   }) {
+     return (
+       <ProtectedRoute>
+         <div className="min-h-screen bg-gray-50">
+           <header className="bg-white shadow-sm border-b">
+             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+               <div className="flex justify-between items-center h-16">
+                 <h1 className="text-xl font-semibold">School Dashboard</h1>
+                 <LogoutButton />
+               </div>
+             </div>
+           </header>
+           <main>{children}</main>
+         </div>
+       </ProtectedRoute>
+     );
+   }
+   ```
+
+6. DASHBOARD PAGE (app/dashboard/page.tsx):
+
+   ```tsx
+   import { DashboardRouter } from "@/components/auth/RoleBasedRouter";
+   import { useAuthStore } from "@/store/auth";
+   import { UserLogsList } from "@/components/logs/UserLogsList";
+
+   export default function DashboardPage() {
+     const { user } = useAuthStore();
+
+     return (
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+         <DashboardRouter />
+
+         <div className="mb-8">
+           <h1 className="text-2xl font-bold text-gray-900">
+             Welcome back, {user?.name}!
+           </h1>
+           <p className="text-gray-600">Role: {user?.role}</p>
+         </div>
+
+         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+           <div>
+             <h2 className="text-lg font-semibold mb-4">Your Activity</h2>
+             <UserLogsList />
+           </div>
+         </div>
+       </div>
+     );
+   }
+   ```
+
+7. ONBOARDING PAGE (app/onboarding/page.tsx):
+
+   ```tsx
+   import { ProtectedRoute } from "@/components/providers/AuthProvider";
+
+   export default function OnboardingPage() {
+     return (
+       <ProtectedRoute requiredRoles={["SUPER_ADMIN"]}>
+         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+           <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+             <h1 className="text-2xl font-bold text-center mb-6">
+               Welcome, Super Admin!
+             </h1>
+             <p className="text-gray-600 text-center mb-8">
+               Complete your school setup to get started.
+             </p>
+
+             {/* Add your onboarding form here */}
+             <div className="space-y-4">
+               <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg">
+                 Setup School Profile
+               </button>
+               <button className="w-full bg-green-600 text-white py-2 px-4 rounded-lg">
+                 Configure System Settings
+               </button>
+             </div>
+           </div>
+         </div>
+       </ProtectedRoute>
+     );
+   }
+   ```
+
+8. ROLE-BASED COMPONENTS:
+
+   ```tsx
+   import { RoleBasedContent, MultiRoleContent } from "@/components/auth/RoleBasedRouter";
+
+   // Show content only to specific role
+   <RoleBasedContent role="SUPER_ADMIN">
+     <AdminPanel />
+   </RoleBasedContent>
+
+   // Show content to multiple roles
+   <MultiRoleContent allowedRoles={["ADMIN", "TEACHER"]}>
+     <StudentManagement />
+   </MultiRoleContent>
+   ```
+
+9. CREATING USER LOGS MANUALLY:
+
+   ```tsx
+   import { createUserLog } from "@/actions/user-logs";
+   import { useAuthStore } from "@/store/auth";
+
+   const { user } = useAuthStore();
+
+   // Create a custom log entry
+   const handleAction = async () => {
+     if (user) {
+       await createUserLog({
+         name: "Custom Action",
+         activity: "User performed a specific action",
+         userId: user.id,
+       });
+     }
+   };
+   ```
+
+10. MIDDLEWARE (middleware.ts - Optional):
+
+    ```tsx
+    import { NextResponse } from "next/server";
+    import type { NextRequest } from "next/server";
+
+    export function middleware(request: NextRequest) {
+      const { pathname } = request.nextUrl;
+
+      // Get user cookie
+      const userCookie = request.cookies.get("user")?.value;
+
+      // Redirect to login if no user and trying to access protected routes
+      if (!userCookie && pathname.startsWith("/dashboard")) {
+        return NextResponse.redirect(new URL("/auth/login", request.url));
+      }
+
+      // Redirect authenticated users away from auth pages
+      if (userCookie && pathname.startsWith("/auth")) {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
+
+      return NextResponse.next();
+    }
+
+    export const config = {
+      matcher: ["/dashboard/:path*", "/auth/:path*", "/onboarding/:path*"],
+    };
+    ```
+
+==============================================
+KEY FEATURES:
+==============================================
+
+✅ Server-side authentication with cookies
+✅ Client-side state management with Zustand
+✅ Automatic login/logout logging
+✅ Role-based routing (SUPER_ADMIN → onboarding, others → dashboard)
+✅ Protected routes with role checking
+✅ Device and IP tracking
+✅ Token refresh handling
+✅ Activity logging system
+✅ Responsive UI components
+✅ Toast notifications
+✅ TypeScript support
+
+==============================================
+AUTHENTICATION FLOW:
+==============================================
+
+1. User submits login form
+2. Server validates credentials
+3. Server creates session cookies
+4. Client updates Zustand store
+5. Activity log is created
+6. User is redirected based on role:
+   - SUPER_ADMIN → /onboarding
+   - Others → /dashboard
+7. Protected routes check authentication
+8. Logout clears both server and client sessions
+
+==============================================
+SECURITY FEATURES:
+==============================================
+
+🔒 HttpOnly cookies for server sessions
+🔒 JWT tokens with refresh mechanism
+🔒 Role-based access control
+🔒 Activity logging and monitoring
+🔒 Device and IP tracking
+🔒 Secure logout with token revocation
+🔒 Protected routes with middleware
+🔒 Input validation with Zod schemas
+
+\*/
