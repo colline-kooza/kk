@@ -3,7 +3,8 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { User, School } from "@/store/auth";
+import { User } from "@/store/auth";
+import { School } from "./school";
 
 const API_BASE_URL = process.env.API_URL || "http://localhost:3001";
 
@@ -251,26 +252,22 @@ export async function getSchoolById(schoolId: string): Promise<School | null> {
   try {
     // For now, return a mock school object
     // In a real implementation, you'd fetch from your API
-    const mockSchool: School = {
-      id: "school_1",
-      name: "Mount Carmel School",
-      logo: "https://example.com/logo.png",
-      primaryEmail: "info@mountcarmelschool.edu",
-      primaryPhone: "+256-700-123456",
-      address: "123 Education Street, Kampala, Uganda",
-      website: "https://www.mountcarmelschool.edu",
-      establishedYear: 1985,
-      motto: "Excellence in Education",
-      description: "A premier educational institution",
-      colors: {
-        primary: "#1a365d",
-        secondary: "#3182ce",
-      },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    // const mockSchool: School = {
+    //   id: "school_1",
+    //   name: "Mount Carmel School",
+    //   logo: "https://example.com/logo.png",
+    //   primaryEmail: "info@mountcarmelschool.edu",
+    //   primaryPhone: "+256-700-123456",
+    //   address: "123 Education Street, Kampala, Uganda",
+    //   website: "https://www.mountcarmelschool.edu",
+    //   establishedYear: 1985,
+    //   slogan: "Excellence in Education",
+    //   description: "A premier educational institution",
+    //   createdAt: new Date().toISOString(),
+    //   updatedAt: new Date().toISOString(),
+    // };
 
-    return mockSchool;
+    return null;
   } catch (error) {
     console.error("Error fetching school:", error);
     return null;

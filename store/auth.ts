@@ -1,4 +1,5 @@
 // store/auth.ts
+import { School } from "@/actions/school";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -25,21 +26,21 @@ export interface User {
 }
 
 // School interface
-export interface School {
-  id: string;
-  name: string;
-  logo: string | null;
-  primaryEmail: string | null;
-  primaryPhone: string | null;
-  address: string | null;
-  website: string | null;
-  establishedYear: number | null;
-  motto: string | null;
-  description: string | null;
-  colors: Record<string, string> | null;
-  createdAt: string;
-  updatedAt: string;
-}
+// export interface School {
+//   id: string;
+//   name: string;
+//   logo: string | null;
+//   primaryEmail: string | null;
+//   primaryPhone: string | null;
+//   address: string | null;
+//   website: string | null;
+//   establishedYear: number | null;
+//   motto: string | null;
+//   description: string | null;
+//   colors: Record<string, string> | null;
+//   createdAt: string;
+//   updatedAt: string;
+// }
 
 interface AuthState {
   // State

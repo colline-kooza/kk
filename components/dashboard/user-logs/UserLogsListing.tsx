@@ -16,12 +16,28 @@ import {
 } from "@/components/ui/select";
 
 import { UserLog } from "@/actions/user-logs";
+import { getNormalDate } from "@/lib/getNormalDate";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface UserLogsListProps {
   userLogs: UserLog[];
   showUserInfo?: boolean;
 }
+function groupLogsByDate(logs: UserLog[]) {
+  const grouped = logs.reduce((acc, log) => {
+    const date = getNormalDate(log.createdAt);
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(log);
+    return acc;
+  }, {} as Record<string, UserLog[]>);
 
+  // Sort dates in descending order
+  return Object.entries(grouped).sort(
+    (a, b) => new Date(b[0]).getTime() - new Date(a[0]).getTime()
+  );
+}
 export function UserLogsList({
   userLogs,
   showUserInfo = false,
@@ -35,7 +51,7 @@ export function UserLogsList({
     cutoffDate.setDate(cutoffDate.getDate() - displayDays);
     return logDate >= cutoffDate;
   });
-
+  const groupedLogs = groupLogsByDate(filteredLogs);
   const handleDaysChange = (value: string) => {
     setDisplayDays(parseInt(value));
   };
@@ -71,11 +87,29 @@ export function UserLogsList({
             <p>No activity logs found for the selected period.</p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {filteredLogs.map((log) => (
-              <LogItem key={log.id} log={log} showUserInfo={showUserInfo} />
+          // <div className="space-y-4">
+          //   {filteredLogs.map((log) => (
+          //     <LogItem key={log.id} log={log} showUserInfo={showUserInfo} />
+          //   ))}
+          // </div>
+          <ScrollArea className="h-[400px] pr-4">
+            {groupedLogs.map(([date, dateLogs]) => (
+              <div key={date} className="mb-6">
+                <h3 className="text-lg font-semibold text-blue-700 px-4 mb-3 sticky top-0 bg-blue-50 py-2">
+                  {date}
+                </h3>
+                <div className="space-y-4">
+                  {dateLogs.map((log) => (
+                    <LogItem
+                      key={log.id}
+                      log={log}
+                      showUserInfo={showUserInfo}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
-          </div>
+          </ScrollArea>
         )}
       </CardContent>
     </Card>

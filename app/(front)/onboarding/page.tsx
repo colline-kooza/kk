@@ -1,4 +1,6 @@
+import SchoolProfileForm from "@/components/dashboard/school-profile/SchoolProfileForm";
 import { ProtectedRoute } from "@/components/providers/AuthProvider";
+import Link from "next/link";
 
 export default function OnboardingPage() {
   return (
@@ -14,12 +16,16 @@ export default function OnboardingPage() {
 
           {/* Add your onboarding form here */}
           <div className="space-y-4">
-            <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg">
+            {/* <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg">
               Setup School Profile
-            </button>
-            <button className="w-full bg-green-600 text-white py-2 px-4 rounded-lg">
-              Configure System Settings
-            </button>
+            </button> */}
+            <SchoolProfileForm />
+            <Link
+              href={"/dashboard"}
+              className="w-full block text-center bg-green-600 text-white py-2 px-4 rounded-lg"
+            >
+              Go to the Dashboard
+            </Link>
           </div>
         </div>
       </div>

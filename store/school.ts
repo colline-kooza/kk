@@ -1,5 +1,6 @@
 // import { School } from "@/types/types";
-import { School } from "@/types/auth";
+// import { School } from "@/types/auth";
+import { School } from "@/actions/school";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 

@@ -18,11 +18,57 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { User } from "@/store/auth";
+import { useAuthStore, User } from "@/store/auth";
+import { toast } from "sonner";
+import { logout } from "@/actions/auth";
+import { createLogoutLog } from "@/actions/user-logs";
+import { useRouter } from "next/navigation";
+import { useDeviceInfo } from "@/hooks/useDeviceInfo";
+import { useState } from "react";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
+  const [isLoading, setIsLoading] = useState(false);
+  const { clearAuth } = useAuthStore();
+  const { deviceInfo } = useDeviceInfo();
+  const router = useRouter();
 
+  const handleLogout = async () => {
+    if (!user) return;
+
+    try {
+      setIsLoading(true);
+
+      // Create logout log before clearing auth
+      await createLogoutLog(user.id, user.name, deviceInfo);
+
+      // Clear server session
+      const result = await logout();
+
+      if (result.success) {
+        // Clear client state
+        clearAuth();
+
+        toast.success("Logged out successfully", {
+          description: "You have been securely logged out.",
+        });
+
+        // Redirect to login
+        router.push("/auth/login");
+      } else {
+        toast.error("Logout failed", {
+          description: result.error || "Please try again.",
+        });
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Logout error", {
+        description: "An unexpected error occurred.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -95,7 +141,7 @@ export function NavUser({ user }: { user: User }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>
