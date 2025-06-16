@@ -211,8 +211,8 @@ export default function LoginForm() {
               </h3>
               <div className="space-y-2 text-xs text-gray-600">
                 <div>
-                  <strong>Super Admin:</strong> admin@mountcarmelschool.edu /
-                  Admin@2025
+                  <strong> Admin:</strong> gmukejohnbaptist@gmail.com /
+                  Mjbsmile8@
                 </div>
                 <div>
                   <strong>Teacher:</strong> john.teacher@mountcarmelschool.edu /
