@@ -18,7 +18,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { School } from "lucide-react";
-import { User } from "@/store/auth";
+import { User } from "@/types/login";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

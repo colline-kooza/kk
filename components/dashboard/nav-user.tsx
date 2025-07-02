@@ -18,13 +18,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAuthStore, User } from "@/store/auth";
 import { toast } from "sonner";
-import { logout } from "@/actions/auth";
 import { createLogoutLog } from "@/actions/user-logs";
 import { useRouter } from "next/navigation";
 import { useDeviceInfo } from "@/hooks/useDeviceInfo";
 import { useState } from "react";
+import { User } from "@/types/login";
+import { useAuthStore } from "@/store/auth";
+import { logoutUser } from "@/actions/login";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
@@ -43,23 +44,17 @@ export function NavUser({ user }: { user: User }) {
       await createLogoutLog(user.id, user.name, deviceInfo);
 
       // Clear server session
-      const result = await logout();
+      await logoutUser();
 
-      if (result.success) {
-        // Clear client state
-        clearAuth();
+      // Clear client state
+      clearAuth();
 
-        toast.success("Logged out successfully", {
-          description: "You have been securely logged out.",
-        });
+      toast.success("Logged out successfully", {
+        description: "You have been securely logged out.",
+      });
 
-        // Redirect to login
-        router.push("/auth/login");
-      } else {
-        toast.error("Logout failed", {
-          description: result.error || "Please try again.",
-        });
-      }
+      // Redirect to login
+      router.push("/auth/login");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Logout error", {

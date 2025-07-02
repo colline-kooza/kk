@@ -29,7 +29,7 @@ export default function Logo({
         </div>
         <Image
           alt={school?.name ?? "School Pro"}
-          src={school?.logo ?? "/images/logo.png"}
+          src={school?.logo ?? "/images/lecify-1.png"}
           width={500}
           height={150}
           className="w-44"
@@ -46,7 +46,7 @@ export default function Logo({
         </div>
         <Image
           alt={school?.name ?? "School Pro"}
-          src={school?.logo ?? "/images/logo.png"}
+          src={school?.logo ?? "/images/lecify-1.png"}
           width={500}
           height={150}
           className="w-44"

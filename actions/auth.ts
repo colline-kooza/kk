@@ -1,10 +1,8 @@
-// actions/auth.ts
 "use server";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { User } from "@/store/auth";
 import { School } from "./school";
+import { User } from "@/types/login";
 
 const API_BASE_URL = process.env.API_URL || "http://localhost:3001";
 

@@ -5,9 +5,12 @@ import React, { ReactNode } from "react";
 
 export default function FrontLayout({ children }: { children: ReactNode }) {
   return (
-    <div>
+    <div className="max-w-[100rem] mx-auto min-h-screen flex flex-col overflow-hidden">
       <SiteHeader />
-      {children}
+      <div className="min-h-screen flex flex-col ">
+        {children}
+        
+      </div>
       <SiteFooter />
     </div>
   );

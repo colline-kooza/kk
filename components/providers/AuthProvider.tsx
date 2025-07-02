@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import { getServerUser, getServerSchool } from "@/actions/auth";
+import { getSchool, getServerAuthData } from "@/actions/login";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -19,12 +20,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const initializeAuth = async () => {
       try {
         // Check if we have server-side authentication
-        const serverUser = await getServerUser();
-        const serverSchool = await getServerSchool();
+        const serverUser = await getServerAuthData();
+        const serverSchool = await getSchool();
 
         if (serverUser) {
           // Update client state with server data
-          setUser(serverUser);
+          if (serverUser.user) {
+            setUser(serverUser.user);
+          }
 
           if (serverSchool) {
             setSchool(serverSchool);

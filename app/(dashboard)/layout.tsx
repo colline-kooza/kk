@@ -1,5 +1,3 @@
-import { ProtectedRoute } from "@/components/providers/AuthProvider";
-import { LogoutButton } from "@/components/auth/LogoutButton";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { getServerUser } from "@/actions/auth";
 import { redirect } from "next/navigation";

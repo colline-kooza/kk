@@ -3,15 +3,16 @@ import { Input } from "@/components/ui/input";
 import { Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import Link from "next/link";
 import Logo from "./logo";
+import MainLogo from "./main-logo";
 // import Logo from "../logo";
 
 export default function SiteFooter() {
   return (
     <footer className="w-full bg-slate-900 text-white">
-      <div className="container px-4 py-16 md:px-6">
+      <div className="container px-4 py-12 md:px-6">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
-            <Logo variant="dark" />
+            <MainLogo/>
             <p className="text-sm text-white/90">
               From admissions to academics, simplify every aspect of school
               administration with our comprehensive and user-friendly platform.

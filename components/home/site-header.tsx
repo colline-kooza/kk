@@ -4,7 +4,9 @@ import * as React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { GraduationCap, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
+import MainLogo from "./main-logo";
+import { RainbowButton } from "../magicui/rainbow-button";
 
 const menuItems = [
   { title: "Home", href: "/" },
@@ -17,14 +19,9 @@ export default function SiteHeader() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="fixed top-0 z-50 w-full bg-transparent  backdrop-blur-xl supports-[backdrop-filter]:bg-background/20 py-2 px-5 ">
       <div className="container mx-auto flex h-14 items-center">
-        <Link href="/" className="flex items-center space-x-2 mr-4">
-          <div className="bg-blue-500 flex items-center justify-center rounded-full w-8 h-8 p-1">
-            <GraduationCap className="text-white w-6 h-6" />
-          </div>
-          <span className="font-bold text-xl">Lectify</span>
-        </Link>
+        <MainLogo />
 
         <nav className="hidden md:flex flex-1 justify-center">
           <ul className="flex space-x-4">
@@ -45,7 +42,10 @@ export default function SiteHeader() {
           <Button href="/auth/login" variant="ghost">
             Log in
           </Button>
-          <Button href="/auth/register">Sign up</Button>
+          <RainbowButton link="/auth/login" className="h-10 px-8 text-xs font-medium ">
+            Sign up
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </RainbowButton>
         </div>
 
         <Sheet open={open} onOpenChange={setOpen}>
@@ -89,7 +89,14 @@ export default function SiteHeader() {
                 >
                   Log in
                 </Button>
-                <Button className="w-full" onClick={() => setOpen(false)}>
+                <Button
+                  variant="outline"
+                  className="w-full px-8 py-3 text-white 
+      bg-gradient-to-r from-[#7938cc] via-[#9d5ce0] to-[#7938cc] bg-[length:200%_100%] 
+      hover:bg-[position:100%_0] hover:shadow-lg hover:shadow-[#7938cc]/25
+      animate-[rainbow_3s_ease-in-out_infinite] cursor-pointer"
+                  onClick={() => setOpen(false)}
+                >
                   Sign up
                 </Button>
               </div>

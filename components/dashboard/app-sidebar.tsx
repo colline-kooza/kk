@@ -23,7 +23,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { User } from "@/store/auth";
+import { User } from "@/types/login";
 
 // School management system data
 const data = {

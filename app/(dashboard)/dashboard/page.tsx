@@ -7,21 +7,23 @@ import {
   MetricCardsSkeleton,
   StudentsTableSkeleton,
 } from "@/components/dashboard/loading-skeleton";
-import { getServerUser } from "@/actions/auth";
 import { redirect } from "next/navigation";
+import { getServerUser } from "@/actions/auth";
+import { getServerAuthData } from "@/actions/login";
 
 // Simulate async data loading
 async function DashboardContent() {
   // Simulate loading delay
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  const user = await getServerUser();
-  if (!user) {
+  const user = await getServerAuthData();
+  console.log(user.user?.id)
+  if (!user.user) {
     redirect("/auth/login");
   }
   return (
     <div className="space-y-6">
       <WelcomeBanner
-        userName={user.name.split(" ")[0]}
+        userName={user.user?.name?.split(" ")[0] ?? ""}
         schoolName="Oakwood Elementary School"
       />
       <MetricCards />
