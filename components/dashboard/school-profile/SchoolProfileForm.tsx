@@ -41,9 +41,10 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import useSchoolStore from "@/store/school";
-import { createSchool } from "@/actions/school";
+
 import { useRouter } from "next/navigation";
+import { useSchoolStore } from "@/store/school";
+import { createSchool } from "@/actions/schools";
 
 // School validation schema (matching your provided schema)
 const SchoolSchema = z.object({
@@ -105,9 +106,9 @@ export default function SchoolProfileForm() {
     setIsSubmitting(true);
 
     try {
-      const createdSchool = await createSchool(data);
-      setSchool(createdSchool);
-      console.log("School created successfully:", createdSchool);
+      // const createdSchool = await createSchool(data);
+      // setSchool(createdSchool);
+      // console.log("School created successfully:", createdSchool);
 
       toast.success("Success!", {
         description: "School profile created successfully.",

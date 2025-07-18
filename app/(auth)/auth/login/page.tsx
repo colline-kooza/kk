@@ -6,10 +6,10 @@ import React from "react";
 
 export default async function page() {
   const user = await getServerUser();
-  if (user) {
+  if (user?.id) {
     const role = user.role;
     const path =
-      role === "ADMIN" || role === "SUPER_ADMIN" ? "/dashboard" : "/portal";
+      role === "SUPER_ADMIN" ? "/dashboard/super-admin" : "/dashboard";
     redirect(path);
   }
   return (

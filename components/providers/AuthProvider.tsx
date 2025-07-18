@@ -4,8 +4,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
-import { getServerUser, getServerSchool } from "@/actions/auth";
-import { getSchool, getServerAuthData } from "@/actions/login";
+import { getSchool, getServerAuthData } from "@/actions/auth";
 
 interface AuthProviderProps {
   children: React.ReactNode;

@@ -19,13 +19,13 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { toast } from "sonner";
-import { createLogoutLog } from "@/actions/user-logs";
 import { useRouter } from "next/navigation";
 import { useDeviceInfo } from "@/hooks/useDeviceInfo";
 import { useState } from "react";
 import { User } from "@/types/login";
 import { useAuthStore } from "@/store/auth";
-import { logoutUser } from "@/actions/login";
+import { logoutUser } from "@/actions/logout";
+import { createLoginOut } from "@/actions/auth";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
@@ -41,7 +41,7 @@ export function NavUser({ user }: { user: User }) {
       setIsLoading(true);
 
       // Create logout log before clearing auth
-      await createLogoutLog(user.id, user.name, deviceInfo);
+      await createLoginOut(user.id, user.name, deviceInfo);
 
       // Clear server session
       await logoutUser();
@@ -77,6 +77,7 @@ export function NavUser({ user }: { user: User }) {
                 <AvatarImage
                   src={user.image || "/placeholder.svg"}
                   alt={user.name}
+                  className="object-cover"
                 />
                 <AvatarFallback className="rounded-lg">
                   {user.name
@@ -106,6 +107,8 @@ export function NavUser({ user }: { user: User }) {
                   <AvatarImage
                     src={user.image || "/placeholder.svg"}
                     alt={user.name}
+                                      className="object-cover"
+
                   />
                   <AvatarFallback className="rounded-lg">
                     {user.name

@@ -1,45 +1,65 @@
 "use client";
-import { ArrowLeft, Home, RefreshCw, ServerCrash } from "lucide-react";
-import Link from "next/link";
 
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Shield, ArrowLeft, Home } from "lucide-react";
+import Lottie from "lottie-react";
+import animationData from "./../public/images/error-animation.json";
 
 export default function Error() {
+  const router = useRouter();
+
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50/50 p-4">
-      <Card className="w-full max-w-2xl text-center">
-        <CardContent className="pt-16">
-          <div className="mb-8 flex justify-center">
-            <div className="rounded-full bg-destructive/90 p-6">
-              <ServerCrash
-                className="h-12 w-12 text-destructive-foreground"
-                aria-hidden="true"
-              />
+    <div className="h-screen bg-gradient-to-br from-red-50 via-white to-red-100 flex justify-center items-center">
+      <main className="container mx-auto px-4 py-12">
+        <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <div className="inline-flex items-center space-x-2 bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-medium">
+                <Shield className="w-4 h-4" />
+                <span>500 Access Restricted</span>
+              </div>
+              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-800">500</span> Oops! Something Wrong
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-800"> Happened</span>
+              </h1>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                It looks like Something wrong Happened try reloading ...
+              </p>
+            </div>
+
+            {/* 👇 Buttons with navigation */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                className="bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg"
+                onClick={() => router.refresh()} // 👈 Go back
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Go Reload
+              </Button>
+
+              <Button
+                variant="outline"
+                className="border-red-300 text-red-700 hover:bg-red-50"
+                onClick={() => router.push("/dashboard")} // 👈 Go to login
+              >
+                <Home className="w-4 h-4 mr-2" />
+                Dashboard
+              </Button>
             </div>
           </div>
-          <h1 className="mb-4 text-3xl md:text-5xl font-bold tracking-tight">
-            500 - Server Error
-          </h1>
-          <p className="mb-8 text-lg text-muted-foreground">
-            Sorry! Something went wrong on our server. We&apos;re working to fix
-            the issue.
-          </p>
-          <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button variant="outline" onClick={() => window.location.reload()}>
-              <RefreshCw className="mr-2 h-4 w-4" />
-              Refresh Page
-            </Button>
-            <Button variant="outline" onClick={() => window.history.back()}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Go Back
-            </Button>
+
+          {/* Lottie animation */}
+          <div className="relative z-10">
+            <Lottie
+              animationData={animationData}
+              loop
+              autoplay
+              className="w-full max-w-md h-60"
+            />
           </div>
-        </CardContent>
-        <CardFooter className="justify-center pb-16 pt-8 text-sm text-muted-foreground">
-          © {new Date().getFullYear()} SchoolPro. All rights reserved.
-        </CardFooter>
-      </Card>
-    </main>
+        </div>
+      </main>
+    </div>
   );
 }

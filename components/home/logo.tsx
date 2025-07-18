@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import useSchoolStore from "@/store/school";
+import { useSchoolStore } from "@/store/school";
 // import useSchoolStore from "@/store/school";
 import { GraduationCap } from "lucide-react";
 import Image from "next/image";

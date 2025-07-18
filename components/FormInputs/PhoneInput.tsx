@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CircleHelp } from "lucide-react";
-import { countries } from "@/countries";
+import { countries } from "@/lib/countries";
 
 type TextInputProps = {
   register: any;
@@ -41,11 +41,11 @@ export default function PhoneInput({
   const initialCountryCode = "UG";
   const modifiedCountries = countries.map((country) => {
     return {
-      value: country.value,
-      label: `${country.countryCode} ${country.phoneCode}`,
-      phoneCode: country.phoneCode,
-      currencyCode: country.currencyCode,
-      countryCode: country.countryCode,
+      value: country.name,
+      label: `${country.code} ${country.code}`,
+      phoneCode: country.code,
+      currencyCode: country.code,
+      countryCode: country.code,
       flag: country.flag,
     };
   });

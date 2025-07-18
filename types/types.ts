@@ -580,3 +580,78 @@ export interface EventData {
   endTime: string;
   location: string;
 }
+
+export interface DepartmentData {
+  id: string;
+  name: string;
+  hodName: string;
+  hodId: string;
+  slug: string;
+  createdAt: Date;
+}
+
+export interface MinDepartmentData
+  extends Omit<DepartmentData, "createdAt" | "slug" | "hodId" | "hodName"> {}
+export interface CreateDepartmentData
+  extends Omit<
+    DepartmentData,
+    "id" | "createdAt" | "hodName" | "slug" | "hodId"
+  > {}
+
+export interface UpdateDepartmentData {
+  name?: string;
+  hodName?: string;
+  hodId?: string;
+}
+
+export interface DepartmentsResponse {
+  data: DepartmentData[] | [];
+  meta: {
+    total: number | 0;
+    searchQuery?: string;
+    pagination: {
+      page: number | 1;
+      limit: number | 10;
+      totalPages: number | 0;
+    };
+  };
+}
+
+export interface QueriesDepartmentResponse {
+  success: boolean;
+  data: DepartmentsResponse | null;
+  error?: string;
+  message?: string;
+}
+export interface QueriesMinDepartmentResponse {
+  success: boolean;
+  data: MinDepartmentData[] | [];
+  error?: string;
+  message?: string;
+}
+
+export interface SingleQueryDepartmentResponse {
+  success: boolean;
+  data: DepartmentData | null;
+  error?: string;
+  message?: string;
+}
+
+export interface MutationDepartmentResponse {
+  success: boolean;
+  data?: DepartmentData | null;
+  error?: string;
+  message?: string;
+}
+
+export interface MinTeachersDataProps {
+  id: string;
+  name: string;
+}
+
+export interface QueriesMinTeachersDataResponse {
+  success: boolean;
+  data: MinTeachersDataProps[] | [];
+  error?: string;
+  message?: string;
+}

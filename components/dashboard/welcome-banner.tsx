@@ -21,10 +21,12 @@ export function WelcomeBanner({ userName, schoolName }: WelcomeBannerProps) {
           <div>
             <h1 className="text-2xl font-bold mb-2">Welcome back, {userName}!</h1>
             <p className="text-blue-100 mb-1">{currentDate}</p>
-            <p className="text-blue-100 flex items-center gap-2">
+           {schoolName && (
+             <p className="text-blue-100 flex items-center gap-2">
               <School className="h-4 w-4" />
               {schoolName}
             </p>
+           )}
           </div>
           <div className="hidden md:block">
             <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center">

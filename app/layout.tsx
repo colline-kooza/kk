@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google"; // Changed from Inter to Poppins
+import { Poppins } from "next/font/google";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 
@@ -13,6 +13,9 @@ import "./globals.css";
 import { ourFileRouter } from "./api/uploadthing/core";
 import { Toaster } from "react-hot-toast";
 import { Toaster as SoonerToaster } from "@/components/ui/sonner";
+import ReactQueryProvider from "@/lib/ReactQueryProvider";
+import { SchoolProvider } from "@/components/providers/SchoolProvider";
+import { SchoolLoadingWrapper } from "@/components/providers/SchoolLoadingWrapper";
 
 export const metadata: Metadata = {
   title: "SchoolPro",
@@ -30,7 +33,13 @@ export default function RootLayout({
         <Toaster position="top-center" reverseOrder={false} />
         <SoonerToaster richColors />
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-        {children}
+        <ReactQueryProvider>
+          <SchoolProvider>
+            <SchoolLoadingWrapper>
+              {children}
+            </SchoolLoadingWrapper>
+          </SchoolProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

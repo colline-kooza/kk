@@ -1,5 +1,6 @@
+"use server";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
-import { getServerUser } from "@/actions/auth";
+import { getSchool, getServerUser } from "@/actions/auth";
 import { redirect } from "next/navigation";
 
 export default async function DLayout({
@@ -8,11 +9,10 @@ export default async function DLayout({
   children: React.ReactNode;
 }) {
   const user = await getServerUser();
+  // console.log(user)
   if (!user) {
     redirect("/auth/login");
   }
-  return <DashboardLayout user={user}>{children}</DashboardLayout>;
-}
-{
-  /* <LogoutButton /> */
+  const school = await getSchool();
+  return <DashboardLayout school={school} user={user}>{children}</DashboardLayout>;
 }

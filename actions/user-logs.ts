@@ -156,21 +156,3 @@ export async function createLoginLog(
 
   return await createUserLog(logData);
 }
-
-// Create logout log (helper function)
-export async function createLogoutLog(
-  userId: string,
-  userName: string,
-  deviceInfo?: { device?: string; ipAddress?: string }
-) {
-  const logData: UserLogCreateProps = {
-    name: "User Logout",
-    activity: `${userName} logged out of the system`,
-    userId,
-    time: new Date().toISOString(),
-    device: deviceInfo?.device || "Web Browser",
-    ipAddress: deviceInfo?.ipAddress || "127.0.0.1",
-  };
-
-  return await createUserLog(logData);
-}

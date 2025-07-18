@@ -42,8 +42,8 @@ export default function SiteHeader() {
           <Button href="/auth/login" variant="ghost">
             Log in
           </Button>
-          <RainbowButton link="/auth/login" className="h-10 px-8 text-xs font-medium ">
-            Sign up
+          <RainbowButton link="/auth/enquiry" className="h-10 px-8 text-xs font-medium ">
+            Enquiry
             <ArrowRight className="ml-2 h-4 w-4" />
           </RainbowButton>
         </div>
@@ -97,7 +97,7 @@ export default function SiteHeader() {
       animate-[rainbow_3s_ease-in-out_infinite] cursor-pointer"
                   onClick={() => setOpen(false)}
                 >
-                  Sign up
+                Enquiry
                 </Button>
               </div>
             </nav>

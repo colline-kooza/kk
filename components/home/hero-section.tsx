@@ -42,7 +42,7 @@ export default function HeroSection() {
         <SmallTitle title="Welcome to Lectify" />
 
         <div className="relative">
-          <h1 className="text-3xl font-semibold tracking-tighter sm:text-4xl md:text-4xl lg:text-4xl max-w-5xl mx-auto bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent md:leading-snug">
+          <h1 className="text-3xl font-semibold tracking-tighter sm:text-4xl md:text-4xl lg:text-5xl max-w-5xl mx-auto bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent md:leading-snug">
            Complete Multi School Management 
            <br />
            Solution

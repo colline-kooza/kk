@@ -5,7 +5,12 @@ import axios from "axios";
 import { revalidatePath } from "next/cache";
 import { School } from "@/types/auth";
 import { api } from "@/config/api-client";
-import { SchoolProps } from "@/types/school";
+import { SchoolProps } from "@/components/forms/school/school-admin-form";
+import {
+  PaginationParams,
+  QueriesSchoolResponse,
+  SingleQuerySchoolResponse,
+} from "@/types/schools";
 
 export async function createSchool(data: SchoolProps) {
   try {
@@ -54,5 +59,60 @@ export async function getSchoolNames() {
   } catch (error) {
     console.log(error);
     return [];
+  }
+}
+
+export async function getSchools(
+  pagination: PaginationParams
+): Promise<QueriesSchoolResponse> {
+  try {
+    const query = new URLSearchParams({
+      page: pagination.page?.toString() || "1",
+      limit: pagination.limit?.toString() || "10",
+      ...(pagination.search && { search: pagination.search }),
+      ...(pagination.status && { status: pagination.status }),
+      ...(pagination.establishedYear && {
+        establishedYear: pagination.establishedYear,
+      }),
+      ...(pagination.hasAdmin && {
+        hasAdmin: pagination.hasAdmin,
+      }),
+    }).toString();
+
+    const response = await api.get(`/schools?${query}`);
+    const schools = response.data;
+    return {
+      success: true,
+      message: "Schools fetched successfully",
+      data: schools,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: "Something went wrong",
+      data: null,
+    };
+  }
+}
+
+export async function getSingleSchool(
+  id: string
+): Promise<SingleQuerySchoolResponse> {
+  try {
+    const response = await api.get(`/schools/${id}`);
+    const school = response.data;
+    return {
+      success: true,
+      message: "School fetched successfully",
+      data: school,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: "Something went wrong",
+      data: null,
+    };
   }
 }
