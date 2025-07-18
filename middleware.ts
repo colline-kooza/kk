@@ -13,6 +13,14 @@ export async function middleware(request: NextRequest) {
   const userCookie = request.cookies.get("user");
   const schoolCookie = request.cookies.get("school");
 
+  console.log("Middleware debug:", {
+    host,
+    pathname,
+    urlSubdomain,
+    isProduction: process.env.NODE_ENV === "production",
+    rootDomain: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
+  });
+
   let schoolData: any = null;
   if (schoolCookie) {
     try {
@@ -21,6 +29,8 @@ export async function middleware(request: NextRequest) {
       console.error("Error parsing school cookie:", error);
     }
   }
+
+  // Skip middleware for API routes, static files, and auth pages
   if (
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
@@ -40,7 +50,16 @@ export async function middleware(request: NextRequest) {
       console.log(
         `School not found or inactive for subdomain: ${urlSubdomain}`
       );
-      return NextResponse.redirect(new URL("/auth/login", request.url));
+
+      // In production, redirect to main domain instead of non-existent subdomain
+      const isProduction = process.env.NODE_ENV === "production";
+      const mainDomain = isProduction
+        ? `https://${
+            process.env.NEXT_PUBLIC_ROOT_DOMAIN || "kk-five-pi.vercel.app"
+          }`
+        : `http://localhost:3000`;
+
+      return NextResponse.redirect(new URL("/auth/login", mainDomain));
     }
 
     // Update school cookie if necessary
@@ -81,15 +100,26 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    // Regular users - only redirect from root, allow dashboard access
+    // Regular users - IMPORTANT: Check if we're in production
+    const isProduction = process.env.NODE_ENV === "production";
+
     if (pathname === "/") {
-      const subdomainUrl = buildSubdomainUrl(
-        schoolData.subdomain,
-        "/dashboard",
-        search
-      );
-      console.log(`Redirecting to subdomain: ${subdomainUrl}`);
-      return NextResponse.redirect(new URL(subdomainUrl));
+      if (isProduction) {
+        // In production, use query parameter approach instead of subdomains
+        const schoolUrl = new URL("/dashboard", request.url);
+        schoolUrl.searchParams.set("school", schoolData.subdomain);
+        console.log(`Production redirect to: ${schoolUrl.toString()}`);
+        return NextResponse.redirect(schoolUrl);
+      } else {
+        // Development - use subdomain approach
+        const subdomainUrl = buildSubdomainUrl(
+          schoolData.subdomain,
+          "/dashboard",
+          search
+        );
+        console.log(`Development redirect to subdomain: ${subdomainUrl}`);
+        return NextResponse.redirect(new URL(subdomainUrl));
+      }
     }
   }
 
