@@ -7,9 +7,14 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Get the correct root domain based on environment
+// Get the correct root domain based on environment
 export const getRootDomain = () => {
   const isProduction = process.env.NODE_ENV === "production";
   if (isProduction) {
+    // If no root domain is set, try to detect from window.location or use the current domain
+    if (typeof window !== "undefined") {
+      return window.location.host;
+    }
     return process.env.NEXT_PUBLIC_ROOT_DOMAIN || "kk-five-pi.vercel.app";
   }
   return "localhost:3000";
